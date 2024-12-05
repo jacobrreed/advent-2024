@@ -9,7 +9,7 @@ list2 = []
 total = 0
 totalSimilarityScore = 0
 
-with open("1.txt", "r") as f:
+with open("inputs/1.txt", "r") as f:
     for line in f:
         numbers = line.split()
         list1.append(int(numbers[0]))

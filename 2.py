@@ -1,24 +1,44 @@
-safe_count = 0
-with open("2.txt", "r") as f:
-    # for each line in the file, check that the numbers are either in ascending or descending order
-    # if they are, check that the absolute difference between each number is > 1 and <= 3
-    # If all conditions are met, increment the safe_count
-    for line in f:
-        numbers = line.split()
-        numbers = list(map(int, numbers))
-        ascending = True
-        descending = True
+# Read file into lines
+with open("inputs/2.txt", "r") as f:
+  lines = f.read().strip().split("\n")
+
+def is_safe(numbers):
+    inc = numbers[1] > numbers[0]
+    if inc:
         for i in range(1, len(numbers)):
-            if numbers[i] < numbers[i-1]:
-                ascending = False
-            if numbers[i] > numbers[i-1]:
-                descending = False
-            if not ascending and not descending:
-                break
-            if abs(numbers[i] - numbers[i-1]) > 3:
-                ascending = False
-                descending = False
-                break
-        if ascending or descending:
-            safe_count += 1
-print(safe_count)
+            diff = numbers[i] - numbers[i-1]
+            if not 1 <= diff <= 3:
+                return False
+        return True
+    else:
+        for i in range(1, len(numbers)):
+            diff = numbers[i] - numbers[i-1]
+            if not -3 <= diff <= -1:
+                return False
+        return True
+
+def is_really_safe(nums):
+    if is_safe(nums):
+        return True
+    for i in range(len(nums)):
+        if is_safe(nums[:i] + nums[i+1:]):
+            return True
+    return False
+
+def part1():
+  ans = 0
+  for line in lines:
+    nums = [int(i) for i in line.split()]
+    ans += is_safe(nums)
+  print(ans)
+
+def part2():
+  ans = 0
+  for line in lines:
+    nums = [int(i) for i in line.split()]
+    ans += is_really_safe(nums)
+  print(ans)
+
+
+part1()
+part2()
